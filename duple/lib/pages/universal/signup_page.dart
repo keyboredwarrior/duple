@@ -82,26 +82,18 @@ class _SignupPageState extends State<SignupPage> {
     if(userCredential != null && userCredential.user != null) {
       if(artist){
         await FirebaseFirestore.instance.collection("Artists").doc(userCredential.user!.email).set({
-        'email': userCredential.user!.email,
-        'username': userController.text,
-        'latitude': '',
-        'longitude': '',
+        
       });
       }
       else if(venue){
         await FirebaseFirestore.instance.collection("Venues").doc(userCredential.user!.email).set({
-        'email': userCredential.user!.email,
-        'username': userController.text,
-        'latitude': '',
-        'longitude': '',
+        
+        
       });
       }
       else{
         await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({
-        'email': userCredential.user!.email,
-        'username': userController.text,
-        'latitude': '',
-        'longitude': '',
+        
       });
       }
     }
