@@ -5,6 +5,7 @@ import 'package:duple/components/duple_button.dart';
 import 'package:duple/components/duple_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../helper/helper_functions.dart';
 
@@ -42,6 +43,18 @@ class _SignupPageState extends State<SignupPage> {
   bool artist = false;
   bool venue = false;
 
+  Future<GeoPoint> getCurrentLocation() async{
+    // prompts the user to allow location services
+    LocationPermission perms = await Geolocator.checkPermission();
+    if (perms == LocationPermission.denied) {
+      perms = await Geolocator.requestPermission();
+    }
+    // fetch user location
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // returns latitude and longitude of user in list form
+    GeoPoint userLoc = GeoPoint(position.latitude, position.longitude);
+    return userLoc;
+  }
 
   // Checks to make sure all fields have text in them, both password fields match, and then
   // creates an account with authorization keys stored in Firebase, accessed through Firebase Console
@@ -61,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
           UserCredential? userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: pwdController.text,);
           createUserDocument(userCredential);
           if(context.mounted) Navigator.pop(context);
-        } on FirebaseAuthException catch (e) { // a catch all for any account creation issues
+        } on FirebaseAuthException catch (e) { // a catch all for any account acreation issues
           Navigator.pop(context);
           displayMessageToUser(e.code, context);
         }  
@@ -79,21 +92,27 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Future<void> createUserDocument(UserCredential? userCredential) async {
+    GeoPoint userLoc = await getCurrentLocation();
     if(userCredential != null && userCredential.user != null) {
       if(artist){
         await FirebaseFirestore.instance.collection("Artists").doc(userCredential.user!.email).set({
-        
+        'email': userCredential.user!.email,
+        'username': userController.text,
+        'location': userLoc,
       });
       }
       else if(venue){
         await FirebaseFirestore.instance.collection("Venues").doc(userCredential.user!.email).set({
-        
-        
+        'email': userCredential.user!.email,
+        'username': userController.text,
+        'location': userLoc,
       });
       }
       else{
         await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({
-        
+        'email': userCredential.user!.email,
+        'username': userController.text,
+        'location': userLoc,
       });
       }
     }
