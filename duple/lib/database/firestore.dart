@@ -19,19 +19,10 @@ class FirestoreDatabase {
   User? user = FirebaseAuth.instance.currentUser;
 
   // get Posts collection from firebase
-  final CollectionReference posts = FirebaseFirestore.instance.collection('Posts');
-  
-  // make a post
-  Future<void> addPost(String message){
-    return posts.add({
-      'UserEmail': user!.email,
-      'PostMessage': message,
-      'TimeStamp': Timestamp.now(),
-    });
-  }
+  final CollectionReference posts = FirebaseFirestore.instance.collection('Artists');
 
   // read posts from database
-  Stream<QuerySnapshot> getPostsStream(){
+  Stream<QuerySnapshot> getArtistsStream(){
     final postsStream = FirebaseFirestore.instance.collection('Posts').orderBy('TimeStamp', descending: true).snapshots();
     return postsStream;
   }
@@ -43,6 +34,15 @@ class FirestoreDatabase {
       textcontroller.clear();
     }
     in home page; final FirestoreDatabase firestore = FirestoreDatabase();
+
+      // make a post
+  Future<void> addPost(String message){
+    return posts.add({
+      'UserEmail': user!.email,
+      'PostMessage': message,
+      'TimeStamp': Timestamp.now(),
+    });
+  }
 
   */
 }

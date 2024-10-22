@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget{
       body: Column(
         children: [
           StreamBuilder(
-            stream: database.getPostsStream(), 
+            stream: database.getArtistsStream(), 
             builder: (context,snapshot) {
               if(snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
