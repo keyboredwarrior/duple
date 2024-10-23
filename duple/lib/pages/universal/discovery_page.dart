@@ -2,13 +2,14 @@
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
+import 'package:duple/components/infinite_realtime_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+
 class DiscoveryPage extends StatefulWidget{
 
-  const DiscoveryPage({super.key});
+  const DiscoveryPage({super.key, Object? dataModel});
 
   @override
   State<DiscoveryPage> createState() => _DiscoveryPageState();
@@ -98,9 +99,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                 },
               ),
 
-              Expanded(
-                child: FirestoreListView(query: first, itemBuilder: itemBuilder)
-              ),
+              InfiniteRealtimePagination()              
             ],
           )
         ),

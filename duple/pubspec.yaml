@@ -42,7 +42,8 @@ dependencies:
   geolocator: ^13.0.1
   geocoding: ^3.0.0
   cloud_firestore: ^5.4.4
-  firebase_ui_firestore: ^1.7.0
+  visibility_detector: ^0.4.0+2
+  flutter_riverpod: ^2.6.1
 
 dev_dependencies:
   flutter_test:

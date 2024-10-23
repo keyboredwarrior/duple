@@ -52,7 +52,7 @@ class ProfilePage extends StatelessWidget{
                       const SizedBox(width: 10,),
 
 
-                      Text(user!['username'], style: TextStyle(color: Colors.white)),
+                      //Text(!['username'], style: TextStyle(color: Colors.white)),
                       const SizedBox(width: 100,),
 
                       GestureDetector(
