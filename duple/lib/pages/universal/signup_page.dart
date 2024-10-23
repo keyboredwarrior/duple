@@ -98,21 +98,22 @@ class _SignupPageState extends State<SignupPage> {
         await FirebaseFirestore.instance.collection("Artists").doc(userCredential.user!.email).set({
         'email': userCredential.user!.email,
         'username': userController.text,
-        'location': userLoc,
+        'latitude': userLoc.latitude,
+        'longitude': userLoc.longitude
       });
       }
       else if(venue){
         await FirebaseFirestore.instance.collection("Venues").doc(userCredential.user!.email).set({
         'email': userCredential.user!.email,
         'username': userController.text,
-        'location': userLoc,
       });
       }
       else{
         await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({
         'email': userCredential.user!.email,
         'username': userController.text,
-        'location': userLoc,
+        'latitude': userLoc.latitude,
+        'longitude': userLoc.longitude
       });
       }
     }
