@@ -49,11 +49,11 @@ class ProfilePage extends StatelessWidget{
                         padding: const EdgeInsets.all(25),
                         child: const Icon(Icons.person),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(width: 20,),
 
 
-                      //Text(!['username'], style: TextStyle(color: Colors.white)),
-                      const SizedBox(width: 100,),
+                      Text(user!['username'], style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 140,),
 
                       GestureDetector(
                         onTap: onTap,

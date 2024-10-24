@@ -34,9 +34,6 @@ class SettingsPage extends StatelessWidget{
     return latLong;
   }
 
-  void _setLocation() {
-    
-  }
 
   @override
   Widget build(BuildContext context){

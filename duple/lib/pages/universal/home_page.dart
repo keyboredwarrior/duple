@@ -12,7 +12,15 @@ class HomePage extends StatelessWidget{
     return Scaffold(
       backgroundColor: Colors.black87,
       body:
-      Center()
+      Column(
+        children: [
+          SizedBox(height: 100,),
+          Row(
+            children: [SizedBox(width: 150,)],
+          ),
+          Text('HOME PAGE', style: TextStyle(color: Colors.white),)
+        ],
+      )
     );
   }
 }

@@ -69,14 +69,17 @@ class _SignupPageState extends State<SignupPage> {
     if (pwdController.text != confPwd.text) {
       Navigator.pop(context);
       displayMessageToUser("Passwords Do Not Match", context);
+    } else if(pwdController.text.length < 6){
+      Navigator.pop(context);
+      displayMessageToUser("Password Too Weak", context);
     } else { // if passwords match, attempts to create an account through Firebase
         try {
           UserCredential? userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: pwdController.text,);
           createUserDocument(userCredential);
           if(context.mounted) Navigator.pop(context);
-        } on FirebaseAuthException catch (e) { // a catch all for any account acreation issues
+        } catch (e) { // a catch all for any account acreation issues
           Navigator.pop(context);
-          displayMessageToUser(e.code, context);
+          //displayMessageToUser(e, context);
         }  
     }
   }

@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duple/components/infinite_scroll_pagination.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -16,6 +17,7 @@ class DiscoveryPage extends StatefulWidget{
 }
 
 class _DiscoveryPageState extends State<DiscoveryPage> {
+  final User? currentUser = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
   final ScrollController scrollCtrl = ScrollController();
   TextEditingController searchController = TextEditingController();
@@ -25,6 +27,10 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<DocumentSnapshot<Map<String,dynamic>>> getUserDetails() async {
+    return await FirebaseFirestore.instance.collection("Users").doc(currentUser!.email).get();
   }
 
   void _uploadRandom() async {
