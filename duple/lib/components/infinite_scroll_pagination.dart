@@ -25,6 +25,7 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
   double latitude = 0, longitude = 0;
   double longShift = 0.7228, latShift = 0.726;
   List<QuerySnapshot> artistList = [];
+  double _currentSliderValue = 0;
 
   final StreamController<List<dynamic>> _dataStreamController =
       StreamController<List<dynamic>>();
@@ -79,6 +80,7 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
   @override
   void initState() {
     super.initState();
+    _currentSliderValue = widget.radius;
     initLocation();
     _scrollController = widget.scrollController;
     _fetchPaginatedData();
@@ -98,7 +100,7 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: database.getArtistsStream(latitude, latShift, longitude, longShift),
+      stream: database.getArtistsStream(latitude, latShift*_currentSliderValue/50, longitude, longShift),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Display a loading indicator
@@ -122,7 +124,7 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
                 itemBuilder: (context,index) {
                   final artist = items[index];
                   return ListTile(
-                    title: Text(artist['usernmae']),
+                    title: Text(artist['username']),
                     subtitle: Text(artist['genre1'] + ',' + artist['genre2']),
                   );
                 }

@@ -23,7 +23,10 @@ class FirestoreDatabase {
 
   // read posts from database
   Stream<QuerySnapshot> getArtistsStream(double latitude, double latShift, double longitude, double longShift){
-    final postsStream = FirebaseFirestore.instance.collection('Artists').orderBy('username', descending: true).snapshots();
+    final postsStream = FirebaseFirestore.instance.collection('Artists')
+    .orderBy('username')
+    .where('latitude', isLessThan: latitude + latShift)
+    .snapshots();
     return postsStream;
   }
 }
