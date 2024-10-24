@@ -22,27 +22,8 @@ class FirestoreDatabase {
   final CollectionReference posts = FirebaseFirestore.instance.collection('Artists');
 
   // read posts from database
-  Stream<QuerySnapshot> getArtistsStream(){
-    final postsStream = FirebaseFirestore.instance.collection('Posts').orderBy('TimeStamp', descending: true).snapshots();
+  Stream<QuerySnapshot> getArtistsStream(double latitude, double latShift, double longitude, double longShift){
+    final postsStream = FirebaseFirestore.instance.collection('Artists').orderBy('username', descending: true).snapshots();
     return postsStream;
   }
-
-  /*
-    void postMessage() {
-      String message = textcontroller.text;
-      databse.addPost(message);
-      textcontroller.clear();
-    }
-    in home page; final FirestoreDatabase firestore = FirestoreDatabase();
-
-      // make a post
-  Future<void> addPost(String message){
-    return posts.add({
-      'UserEmail': user!.email,
-      'PostMessage': message,
-      'TimeStamp': Timestamp.now(),
-    });
-  }
-
-  */
 }
