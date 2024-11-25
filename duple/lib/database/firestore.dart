@@ -22,10 +22,10 @@ class FirestoreDatabase {
   final CollectionReference posts = FirebaseFirestore.instance.collection('Artists');
 
   // read posts from database
-  Stream<QuerySnapshot> getArtistsStream(double latitude, double latShift, double longitude, double longShift){
+  Stream<QuerySnapshot> getArtistsStream(double latitude, double latShift, double longitude, double longShift, int limit){
     final postsStream = FirebaseFirestore.instance.collection('Artists')
-    .where('latitude', isLessThan: latitude + latShift)
-    .where('latitude', isGreaterThan: (latitude + latShift) * -1)
+    .where('latitude', isGreaterThanOrEqualTo: latitude - latShift, isLessThanOrEqualTo: latitude + latShift)
+    .where('longitude', isLessThanOrEqualTo: longitude + longShift, isGreaterThanOrEqualTo: longitude -longShift)
     .snapshots();
     return postsStream;
   }

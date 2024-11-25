@@ -34,7 +34,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   }
 
   void _uploadRandom() async {
-    final numbers = List.generate(50, (index) => index + 1);
+    final numbers = List.generate(500, (index) => index + 1);
     Random generator = Random();
     double latitude;
     double longitude;

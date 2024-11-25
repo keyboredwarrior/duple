@@ -53,7 +53,7 @@ class ProfilePage extends StatelessWidget{
 
 
                       Text(user!['username'], style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 140,),
+                      const SizedBox(width: 110,),
 
                       GestureDetector(
                         onTap: onTap,

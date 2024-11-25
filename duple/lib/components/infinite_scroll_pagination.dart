@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'dart:async';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duple/database/firestore.dart';
 import 'package:flutter/material.dart';
@@ -21,21 +22,14 @@ class InfiniteScrollPagination extends StatefulWidget {
 
 class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
   GeoPoint userLoc = GeoPoint(0, 0);
-  TextEditingController searchController = TextEditingController();
   double latitude = 0, longitude = 0;
   double longShift = 0.7228, latShift = 0.726;
-  List<QuerySnapshot> artistList = [];
   double _currentSliderValue = 0;
-
-  final StreamController<List<dynamic>> _dataStreamController =
-      StreamController<List<dynamic>>();
-  Stream<List<dynamic>> get dataStream => _dataStreamController.stream;
   final FirestoreDatabase database = FirestoreDatabase();
-  final List<dynamic> _currentItems = [];
-  int _currentPage = 1;
   final int _pageSize = 60;
   late final ScrollController _scrollController;
   bool _isFetchingData = false;
+  int limit = 15;
 
   void initLocation() async {
     userLoc = await getCurrentLocation();
@@ -51,39 +45,16 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
     return userLoc;
   }
 
-  Future<void> _fetchPaginatedData() async {
-    if (_isFetchingData) {
-      // Avoid fetching new data while already fetching
-      return;
-    }
-    try {
-      _isFetchingData = true;
-      setState(() {});
-
-      final startTime = DateTime.now();
-
-      // Add the updated list to the stream without overwriting the previous data
-      final endTime = DateTime.now();
-      final timeDifference =
-          endTime.millisecondsSinceEpoch - startTime.millisecondsSinceEpoch;
-      _dataStreamController.add(_currentItems);
-      _currentPage++;
-    } catch (e) {
-      _dataStreamController.addError(e);
-    } finally {
-      // Set to false when data fetching is complete
-      _isFetchingData = false;
-      setState(() {});
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _currentSliderValue = widget.radius;
     initLocation();
     _scrollController = widget.scrollController;
-    _fetchPaginatedData();
+    if(_currentSliderValue != widget.radius){
+      _currentSliderValue = widget.radius;
+      setState(() {
+      });
+    }
     _scrollController.addListener(() {
       _scrollController.addListener(() {
         final maxScroll = _scrollController.position.maxScrollExtent;
@@ -91,7 +62,9 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
 
         if (currentScroll == maxScroll) {
           // When the last item is fully visible, load the next page.
-          _fetchPaginatedData();
+          setState(() {
+            limit = 15 + limit;
+          });
         }
       });
     });
@@ -100,7 +73,7 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: database.getArtistsStream(latitude, latShift*_currentSliderValue, longitude, longShift),
+      stream: database.getArtistsStream(latitude, latShift*_currentSliderValue/5, longitude, longShift*_currentSliderValue/10, limit),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Display a loading indicator
@@ -140,13 +113,5 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
         }
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _dataStreamController.close();
-    //we do not have control cover the _scrollController so it should not be disposed here
-    // _scrollController.dispose();
-    super.dispose();
   }
 }
