@@ -1,7 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'dart:async';
-import 'dart:math';
+//import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duple/database/firestore.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _InfiniteScrollPaginationState extends State<InfiniteScrollPagination> {
   final FirestoreDatabase database = FirestoreDatabase();
   final int _pageSize = 60;
   late final ScrollController _scrollController;
-  bool _isFetchingData = false;
+  final bool _isFetchingData = false;
   int limit = 15;
 
   void initLocation() async {
